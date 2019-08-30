@@ -1,15 +1,21 @@
-const path = require("path");
+const db = require("../models");
 
-module.exports = function(app) {
+module.exports = app => {
 
   // index route loads index.html
-  app.get("/",(req, res) => {
-    res.sendFile(path.join(__dirname, "../public/index.html"));
+  app.get("/", (req, res) => {
+    db.Burger.findAll({}).then(dbBurgers => {
+      res.render("index", {
+        msg1: "Hot 'n ready!",
+        msg2: "Devoured!",
+        burgers: dbBurgers
+      });
+    });
   });
 
   // if no matching route is found default to home
-  app.use((req, res) => {
-    res.sendFile(path.join(__dirname, "../public/index.html"));
+  app.get("*", (req, res) => {
+    res.render("404");
   });
 
 };
