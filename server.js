@@ -17,7 +17,7 @@ app.use(express.json());
 // static directory
 app.use(express.static("public"));
 
-// handlebars
+// handlebars engine
 app.engine(
     "handlebars",
     exphbs({
