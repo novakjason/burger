@@ -33,7 +33,11 @@ require("./routes/apiRoutes.js")(app);
 // syncing sequelize models and then starting express app
 db.sequelize.sync({ force: true }).then(() => {
     app.listen(PORT, () => {
-        console.log("Listening!  Access http://localhost:3000");
+      console.log(
+        "==> 🌎  Listening on port %s. Visit http://localhost:%s/ in your browser.",
+        PORT,
+        PORT
+    );
     });
 });
 
