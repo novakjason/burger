@@ -12,28 +12,42 @@
 
     <div class="c-body">
 
-      <div class="c-hotnready">
-        <div class="d-inline-flex m-2">
-          <button class="btn btn-success">eat me</button>
-          <div class="text-center">Reese's Cup Burger</div>
-        </div>
+      <div class="c-hotnready p-2">
 
-        <form class="clearfix m-2" action="POST">
+        <p class="text-center m-3">Hot and ready!</p>
+
+        <ul id="burger-list" class="list-group">
+          {{#each burgers}}
+          {{#unless this.devoured}}
+          <li data-id="{{this.id}}" data-devoured="{{this.devoured}}" class="d-inline-flex list-group-item list-group-item-dark mb-2">
+            <h5>{{this.burger_name}}</h5>
+            <button class="btn btn-success eat">eat me</button>
+          </li>
+          {{/unless}}
+          {{/each}}
+        </ul>
+
+        <form action="POST">
           <div class="form-group d-inline-flex">
-            <input type="text" id="example-text" class="form-control" aria-describedby="example-text"
+            <input type="text" id="burgerName" class="form-control" aria-describedby="burgerName"
               placeholder="Create your burger!">
           </div>
-          <button id="submit" class="btn btn-primary">Submit</button>
+          <button id="cook" class="btn btn-primary">Cook</button>
         </form>
+
       </div>
 
-      <div class="c-devoured">
-        <ul id="example-list" class="list-group">
+      <div class="c-devoured p-2">
+
+        <p class="text-center m-3">Already eaten!</p>
+
+        <ul id="devoured-list" class="list-group">
           {{#each burgers}}
-          <li data-id="{{this.id}}" class="list-group-item">
-            <a href="example/{{this.id}}">{{this.text}}</a>
-            <button class="btn btn-danger float-right delete">ｘ</button>
+          {{#if this.devoured}}
+          <li data-id="{{this.id}}" data-devoured="{{this.devoured}}" class="list-group-item list-group-item-dark mb-2">
+            <h5>{{this.burger_name}}</h5>
           </li>
+          {{/if}}
           {{/each}}
         </ul>
       </div>
@@ -47,4 +61,4 @@
 </div>
 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="/public/js/index.js"></script>
+<script src="/js/index.js"></script>
