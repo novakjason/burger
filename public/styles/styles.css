@@ -3,6 +3,14 @@ body {
     color: #fff;
 }
 
+.card {
+    color: #fe7800;
+}
+
+.list-group-item {
+    line-height: 2.5;
+}
+
 .c-grid-container {
     display: grid;
     grid-template-columns: 1fr 1fr;
