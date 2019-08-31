@@ -1,0 +1,25 @@
+<div class="container">
+  <div class="row">
+    <div class="col-8 offset-2">
+      <div class="card mt-4">
+        <div class="card-body">
+          <h5 class="card-title">Burger</h5>
+          <p>
+            <strong>ID:</strong> {{burger.id}}</p>
+          <p>
+          <p>
+            <strong>Burger Name:</strong> {{burger.name}}</p>
+          <p>
+            <strong>Devoured:</strong> 
+            {{#if burger.devoured}}
+            Yes
+            {{else}}
+            No
+            {{/if}}
+            </p>
+            <a href="/">← Back To Home</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

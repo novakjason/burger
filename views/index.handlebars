@@ -1,9 +1,8 @@
 <div id="home">
-
   <div class="c-grid-container">
 
     <div class="c-header">
-      <h1 class="text-center">CRUD-A-BURGER</h1>
+      <h1 class="text-center">{{msg}}</h1>
     </div>
 
     <div class="c-title">
@@ -11,28 +10,25 @@
     </div>
 
     <div class="c-body">
-
       <div class="c-hotnready p-2">
-
         <p class="text-center m-3">Hot and ready!</p>
 
-        <ul id="burger-list" class="list-group">
-          {{#each burgers}}
-          {{#unless this.devoured}}
-          <li data-id="{{this.id}}" data-devoured="{{this.devoured}}" class="d-inline-flex list-group-item list-group-item-dark mb-2">
-            <h5>{{this.burger_name}}</h5>
-            <button class="btn btn-success eat">eat me</button>
+        <ul id="hotNReady" class="list-group">
+          {{#each burger}}
+          <li data-id="{{this.id}}" class="list-group-item list-group-item-dark mb-2">
+            <a href="burger/{{this.id}}">{{this.name}}</a>
+            <button class="btn btn-danger float-right delete">ｘ</button>
+            <button class="btn btn-success float-right eat">eat</button>
           </li>
-          {{/unless}}
           {{/each}}
         </ul>
 
-        <form action="POST">
-          <div class="form-group d-inline-flex">
+        <form class="clearfix mb-4" action="POST">
+          <div class="form-group">
             <input type="text" id="burgerName" class="form-control" aria-describedby="burgerName"
               placeholder="Create your burger!">
           </div>
-          <button id="cook" class="btn btn-primary">Cook</button>
+          <button id="cook" class="btn btn-primary float-right">Cook</button>
         </form>
 
       </div>
@@ -45,12 +41,13 @@
           {{#each burgers}}
           {{#if this.devoured}}
           <li data-id="{{this.id}}" data-devoured="{{this.devoured}}" class="list-group-item list-group-item-dark mb-2">
-            <h5>{{this.burger_name}}</h5>
+            <a href="burger/{{this.id}}">{{this.name}}</a>
           </li>
           {{/if}}
           {{/each}}
         </ul>
       </div>
+
     </div>
 
     <div class="c-footer p-3">

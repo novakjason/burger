@@ -1,19 +1,24 @@
-const db = require("../models");
+var db = require("../models");
 
-module.exports = function (app) {
-
-  // gets all burgers
-  app.get("/api/burgers", function (req, res) {
-
-    db.Burger.findAll({}).then(function (dbBurgers) {
-      res.json(dbBurgers);
+module.exports = function(app) {
+  // Get all examples
+  app.get("/api/burgers", function(req, res) {
+    db.Burger.findAll({}).then(function(results) {
+      res.json(results);
     });
   });
 
-  // create a new burger
-  app.post("/api/burgers", (req, res) => {
-    db.Burger.create(req.body).then(dbBurgers => {
-        res.json(dbBurgers);
+  // Create a new example
+  app.post("/api/burgers", function(req, res) {
+    db.Burger.create(req.body).then(function(results) {
+      res.json(results);
+    });
+  });
+
+  // Delete an example by id
+  app.delete("/api/burgers/:id", function(req, res) {
+    db.Burger.destroy({ where: { id: req.params.id } }).then(function(results) {
+      res.json(results);
     });
   });
 };

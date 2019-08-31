@@ -1,80 +1,99 @@
+// Get references to page elements
+var $burgerName = $("#burgerName");
+var $cook = $("#cook");
+var $hotNReady = $("#hotNReady");
+
 // object containing methods for each kind of request made to the API
-let API = {
-
-    getBurgers: () => {
-        return $.ajax({
-            url: "api/burgers",
-            type: "GET"
-        });
-    },
-
-    saveBurger: burger => {
-        return $.ajax({
-            headers: {
-                "Content-Type": "application/json"
-            },
-            type: "POST",
-            url: "api/burgers",
-            data: JSON.stringify(burger)
-        });
-    }
+var API = {
+  saveBurger: function(burger) {
+    return $.ajax({
+      headers: {
+        "Content-Type": "application/json"
+      },
+      type: "POST",
+      url: "api/burgers",
+      data: JSON.stringify(burger)
+    });
+  },
+  getBurgers: function() {
+    return $.ajax({
+      url: "api/burgers",
+      type: "GET"
+    });
+  },
+  deleteBurger: function(id) {
+    return $.ajax({
+      url: "api/burgers/" + id,
+      type: "DELETE"
+    });
+  }
 };
 
 // function to use AJAX request to GET burgers from the database and populate the Hot-n-Ready! list
-let showBurgers = () => {
-    
-    // AJAX call
-    API.getBurgers().then(data => {
+var showBurgers = function() {
+  // AJAX call
+  API.getBurgers().then(function(data) {
+    // jquery to show list on DOM with burger name and button
+    var $burgers = data.map(function(burger) {
+      var $a = $("<a>")
+        .text(burger.name)
+        .attr("href", "/burger/" + burger.id);
 
-        // jquery to show list on DOM with burger name and button
-        let $burgers = data.map(burger => {
+      var $li = $("<li>")
+        .attr({
+          class: "list-group-item list-group-item-dark mb-2",
+          "data-id": burger.id
+        })
+        .append($a);
 
-            let $li = $("<li>")
-                .attr({
-                    class: "d-inline-flex list-group-item list-group-item-dark mb-2",
-                    "data-id": burger.id
-                });
-            let $h5 = $("<h5>")
-                .text(burger.burger_name);
-            $li.append($h5);
-            let $button = $("<button>")
-                .addClass("btn btn-success eat")
-                .text("eat me");
-            $li.append($button);
-            return $li;
-        });
+      var $delete = $("<button>")
+        .addClass("btn btn-danger float-right delete")
+        .text("ｘ");
+      var $eat = $("<button>")
+        .addClass("btn btn-success float-right eat")
+        .text("eat");
+      $li.append($delete);
+      $li.append($eat);
 
-        // used to clear Hot-n-ready! before updating DOM with a new list
-        $("#burger-list").empty();
-        $("#burger-list").append($burgers);
+      return $li;
     });
+    // used to clear Hot-n-ready! before updating DOM with a new list
+    $hotNReady.empty();
+    $hotNReady.append($burgers);
+  });
 };
 
 // function to use ajax request to POST the new burger to the database and refresh the Hot-n-Ready! list
-let cookBurger = event => {
-
-    event.preventDefault();
-
-    // pushing burger_name to burger object
-    let burger = {
-        burger_name: $("#burgerName").val().trim()
-    };
-
-    // front-end form validation  * back-end form validation is built into the Burger model - burger_name:{allowNull:false,validate:{len:[1]}} *
-    if (!(burger.burger_name)) {
-        alert("You must enter a name for your burger!");
-        return;
-    }
-
-    // passing new burger name through AJAX call to POST to database
-    API.saveBurger(burger);
-
-    // showing new list
+var cookBurger = function(event) {
+  event.preventDefault();
+  // pushing burger_name to burger object
+  var burger = {
+    name: $burgerName.val().trim()
+  };
+  // front-end form validation  * back-end form validation is built into the Burger model - burger_name:{allowNull:false,validate:{len:[1]}} *
+  if (!burger.name) {
+    alert("You must enter a burger name!");
+    return;
+  }
+  // passing new burger name through AJAX call to POST to database
+  API.saveBurger(burger).then(function() {
     showBurgers();
-
-    // clearing the form
-    $("#burgerName").val("");
+  });
+  // clearing the form
+  $burgerName.val("");
 };
 
-// event listener for the cook button
-$("#cook").on("click", cookBurger);
+// removes the selected burger from database and then refreshes the list
+var deleteButton = function() {
+  var idToDelete = $(this)
+    .parent()
+    .attr("data-id");
+  // passing selected burger id through AJAX call and deleting burger from database
+  API.deleteBurger(idToDelete).then(function() {
+    showBurgers();
+  });
+};
+
+// event listeners for the cook and delete buttons
+$cook.on("click", cookBurger);
+$hotNReady.on("click", ".delete", deleteButton);

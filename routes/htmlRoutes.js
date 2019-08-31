@@ -1,21 +1,27 @@
-const db = require("../models");
+var db = require("../models");
 
-module.exports = app => {
-
-  // index route loads index.html
-  app.get("/", (req, res) => {
-    db.Burger.findAll({}).then(dbBurgers => {
+module.exports = function(app) {
+  // index page
+  app.get("/", function(req, res) {
+    db.Burger.findAll({}).then(function(results) {
       res.render("index", {
-        msg1: "Hot 'n ready!",
-        msg2: "Devoured!",
-        burgers: dbBurgers
+        msg: "CRUD-A-BURGER!",
+        burger: results
       });
     });
   });
 
-  // if no matching route is found default to home
-  app.get("*", (req, res) => {
-    res.render("404");
+  // burger card and pass in a burger by id
+  app.get("/burger/:id", function(req, res) {
+    db.Burger.findOne({ where: { id: req.params.id } }).then(function(results) {
+      res.render("burger", {
+        burger: results
+      });
+    });
   });
 
+  // render 404 page for any unmatched routes
+  app.get("*", function(req, res) {
+    res.render("404");
+  });
 };
