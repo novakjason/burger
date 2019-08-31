@@ -64,10 +64,10 @@ var showBurgers = function() {
 };
 
 // function to use ajax request to POST the new burger to the database and refresh the Hot-n-Ready! list
-var cookBurger = function(event) {
+let cookBurger = event => {
   event.preventDefault();
   // pushing burger_name to burger object
-  var burger = {
+  let burger = {
     name: $burgerName.val().trim()
   };
   // front-end form validation  * back-end form validation is built into the Burger model - burger_name:{allowNull:false,validate:{len:[1]}} *
