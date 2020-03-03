@@ -1,10 +1,11 @@
 // Get references to page elements
-var $burgerName = $("#burgerName");
-var $cook = $("#cook");
-var $hotNReady = $("#hotNReady");
+const $burgerName = $("#burgerName");
+const $cook = $("#cook");
+const $eat = $(".eat");
+const $delete = $(".delete");
 
 // object containing methods for each kind of request made to the API
-var API = {
+const API = {
   saveBurger: function(burger) {
     return $.ajax({
       headers: {
@@ -30,26 +31,26 @@ var API = {
 };
 
 // function to use AJAX request to GET burgers from the database and populate the Hot-n-Ready! list
-var showBurgers = function() {
+const showBurgers = function() {
   // AJAX call
   API.getBurgers().then(function(data) {
     // jquery to show list on DOM with burger name and button
-    var $burgers = data.map(function(burger) {
-      var $a = $("<a>")
+    const $burgers = data.map(function(burger) {
+      const $a = $("<a>")
         .text(burger.name)
         .attr("href", "/burger/" + burger.id);
 
-      var $li = $("<li>")
+      const $li = $("<li>")
         .attr({
           class: "list-group-item list-group-item-dark mb-2",
           "data-id": burger.id
         })
         .append($a);
 
-      var $delete = $("<button>")
+      const $delete = $("<button>")
         .addClass("btn btn-danger float-right delete")
         .text("ｘ");
-      var $eat = $("<button>")
+      const $eat = $("<button>")
         .addClass("btn btn-success float-right eat")
         .text("eat");
       $li.append($delete);
@@ -84,8 +85,8 @@ let cookBurger = event => {
 };
 
 // removes the selected burger from database and then refreshes the list
-var deleteButton = function() {
-  var idToDelete = $(this)
+const deleteButton = function() {
+  const idToDelete = $(this)
     .parent()
     .attr("data-id");
   // passing selected burger id through AJAX call and deleting burger from database
@@ -94,6 +95,7 @@ var deleteButton = function() {
   });
 };
 
-// event listeners for the cook and delete buttons
+// event listeners for the cook, eat, and delete buttons
 $cook.on("click", cookBurger);
-$hotNReady.on("click", ".delete", deleteButton);
+$delete.on("click", deleteButton);
+$eat.on("click", eatButton);
