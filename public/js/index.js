@@ -4,7 +4,7 @@ const $cook = $("#cook");
 const $eat = $(".eat");
 const $delete = $(".delete");
 
-// object containing methods for each kind of request made to the API
+// API controller
 const API = {
   saveBurger: function(burger) {
     return $.ajax({
@@ -16,10 +16,10 @@ const API = {
       data: JSON.stringify(burger)
     });
   },
-  getBurgers: function() {
+  eatBurger: function(id) {
     return $.ajax({
-      url: "api/burgers",
-      type: "GET"
+      url: "api/burgers/" + id,
+      type: "PUT"
     });
   },
   deleteBurger: function(id) {
@@ -48,6 +48,18 @@ const cookBurger = event => {
   });
   // clearing the form
   $burgerName.val("");
+};
+
+//  Updates devoured status to TRUE
+const eatButton = function(event) {
+  event.preventDefault();
+  const burgerID = $(this)
+    .parent()
+    .attr("data-id");
+  // Passing burgerID through API controller using PUT method to update DB then reloading DOM
+  API.eatBurger(burgerID).then(() => {
+    location.reload();
+  });
 };
 
 // removes the selected burger from database and then refreshes DOM
