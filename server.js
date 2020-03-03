@@ -1,7 +1,11 @@
 // dependencies
 require("dotenv").config();
 const express = require("express");
-const exphbs = require("express-handlebars");
+const Handlebars = require("handlebars");
+const expressHandlebars = require("express-handlebars");
+const {
+  allowInsecurePrototypeAccess
+} = require("@handlebars/allow-prototype-access");
 
 // required models for syncing
 const db = require("./models");
@@ -18,7 +22,13 @@ app.use(express.json());
 app.use(express.static("public"));
 
 // handlebars engine
-app.engine("handlebars", exphbs({ defaultLayout: "main" }));
+app.engine(
+  "handlebars",
+  expressHandlebars({
+    defaultLayout: "main",
+    handlebars: allowInsecurePrototypeAccess(Handlebars)
+  })
+);
 app.set("view engine", "handlebars");
 
 // routes
